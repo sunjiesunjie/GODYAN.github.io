@@ -1,0 +1,106 @@
+*{
+    padding:0;
+    margin:0;
+    list-style: none;
+}
+html,body{
+    width: 100%;
+    height: 100%;
+}
+.entirety{
+    width: 100%;
+    height:100%;
+    /*background: #d6ddff;*/
+    position: relative;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+}
+
+.entirety>.tool{
+    width: 130px;
+    height:100%;
+    background: #248755;
+    position: absolute;
+    left:0;
+    top:0;
+
+}
+.tool>.kongbai{
+    padding:15px 0;
+    color:white;
+    text-align: center;
+    font-size: 22px;
+}
+.tool>label{
+    display: block;
+    float: left;
+    margin-left: 15px;
+    margin-top:15px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border:2px solid white;
+    box-sizing: border-box;
+}
+label:nth-child(13){
+    margin-bottom: 0px;
+}
+.tool>label>input{
+    width:28px;
+    height: 25px;
+  margin-left:15px;
+    margin-right:5px;
+}
+
+.entirety>.draw{
+    height:99%;
+    /*background: rgba(87, 175, 182, 0.57);*/
+    position: relative;
+    margin-left: 130px;
+    top:0;
+    border:1px solid white;
+}
+.draw>.menu{
+    width:100%;
+    height: 100px;
+    background: #248755;
+    border-left:1px solid white;
+}
+.draw>canvas{
+    background: #aaaaaa;
+    border: 2px solid #8b8e8e;
+}
+.menu>label{
+    float: left;
+    margin-left: 50px;
+    margin-top:30px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border:2px solid white;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+.topps{
+    width: 1000px;
+    height:536px;
+    overflow: hidden;
+    position: relative;
+}
+.eraser{
+    display: none;
+    position:absolute;
+    left:0;
+    top:0px;
+    border:1px solid #000000;
+}
+.topps>.mask{
+    position: absolute;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    border:1px solid white;
+    background: rgba(0,0,0,0.5);
+    z-index: 10;
+}

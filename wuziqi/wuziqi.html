@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    body{
+        background-image: url("./images/2.jpg");
+        background-size: cover;
+    }
+    canvas{
+        boder:2px solid black;
+        position: absolute;
+        left:0;
+        right:0;
+        top:0;
+        bottom:0;
+        margin:auto;
+    }
+    .box{
+        width: 0px;
+        height:0px;
+        background: blue;
+        position: absolute;
+        left:0;
+        right:0;
+        top:0;
+        bottom:0;
+        margin:auto;
+        transition: all 0.5s;
+    }
+    .active{
+        width: 600px;
+        height:600px;
+        background: blue;
+        position: absolute;
+        left:0;
+        right:0;
+        top:0;
+        bottom:0;
+        margin:auto;
+        transition: all 1.2s;
+        z-index: 999;
+    }
+</style>
+<body>
+<button>保存棋谱</button>
+<div class="box"></div>
+  <canvas width="600" height="600"> </canvas>
+</body>
+</html>
+<script>
+    let canvas=document.querySelector('canvas');
+    let ctx=canvas.getContext('2d')
+    let button=document.querySelector('button')
+    let box=document.querySelector('.box')
+    let flag=true;
+    let drops={};
+    //{ '0-0:'#000000','1_1':'red}
+    drawLine()
+
+    //下棋
+    canvas.onclick=function(e){
+        //获取单钱坐标    点击位置  65/40=1.222 ,0   90/40=2.222,0
+        let ox=Math.floor(e.offsetX/40),
+            oy=Math.floor(e.offsetY/40);
+        if(drops[m(ox,oy)]){
+           return ;
+        }
+        //棋子-》切换颜色
+          if(flag){
+            if(check(ox,oy,'#000000')==5){
+                alert('黑方胜')
+                canvas.onclick=null;
+            }
+
+
+              //黑
+              drawChress(ox,oy,'#000000')
+          }else{
+              //白
+              if(check(ox,oy,'red')==5){
+                  alert('红方胜');
+                  canvas.onclick=null;
+              }
+
+              drawChress(ox,oy,'red')
+          }
+
+
+
+
+    }
+
+         button.onclick=function () {
+
+             box.classList.toggle('active');
+            let imgdata=canvas.toDataURL('image/png')
+             let img=new Image();
+            img.src=imgdata;
+            img.onload=function(){
+                box.appendChild(img);
+            }
+            let a=document.createElement('a');
+            a.href=imgdata;
+            a.download='qipan.png';
+            box.appendChild(a)
+         }
+
+    function drawLine(){
+        //画布清空  保存单钱状态  画线  恢复状态
+        ctx.clearRect(0,0,600,600);
+        ctx.save();
+        ctx.beginPath();
+        // 0,0   14,0
+        //0 1   14 1
+
+        //0,0   0,14
+        //1,0   1,14
+        for(let i=0;i<15;i++){
+           ctx.moveTo(line(0),line(i));
+           ctx.lineTo(line(14),line(i));
+           ctx.moveTo(line(i),line(0));
+           ctx.lineTo(line(i),line(14));
+        }
+        ctx.closePath();
+        ctx.stroke();
+        circle(line(7),line(7));
+        circle(line(3),line(3));
+        circle(line(11),line(3));
+        circle(line(3),line(11));
+        circle(line(11),line(11))
+    }
+    //确定坐标位置
+      function line(x) {
+          //0 20
+          //1 20+40
+          // 2 20+40*2
+         return 40*x+20
+      }
+      function circle(x,y){
+        ctx.save();
+
+        ctx.translate(x,y);
+        ctx.beginPath();
+        ctx.arc(0,0,5,0,Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+
+      }
+        function  drawChress(x,y,color) {
+            ctx.save()
+
+            ctx.translate(line(x),line(y));
+            ctx.beginPath();
+            ctx.arc(0,0,20,0,Math.PI*2);
+            ctx.closePath();
+            ctx.fillStyle=color
+            ctx.fill();
+            ctx.restore();
+            flag=!flag;
+            //0 1 ->0_1
+            drops[m(x,y)]=color;
+
+        }
+        function m(x,y){
+          return `${x}_${y}`;
+        }
+        function check(x,y,color) {
+               //x,y  color
+            //7,7 7,8
+            let row = 1;
+            let i=1;
+            while(drops[m(x+i,y)] == color){
+                row++;
+                i++;
+            }
+            i=1;
+            while(drops[m(x-i,y)] == color){
+                row++;
+                i++;
+            }
+            let cols=1;
+            i=1;
+            while(drops[m(x,y+i)] == color){
+                cols++;
+                i++;
+            }
+            i=1;
+            while(drops[m(x,y-i)] == color){
+                cols++;
+                i++;
+            }
+            let zx=1;
+            i=1;
+            while(drops[m(x+i,y+i)] == color){
+                zx++;
+                i++;
+            }
+            i=1;
+            while(drops[m(x-i,y-i)] == color){
+                zx++;
+                i++;
+            }
+            let yx=1;
+            i=1;
+            while(drops[m(x-i,y+i)] == color){
+                yx++;
+                i++;
+            }
+            i=1;
+            while(drops[m(x+i,y-i)] == color){
+                yx++;
+                i++;
+            }
+            return Math.max(row,cols,zx,yx);
+        }
+
+
+
+
+
+
+
+</script>
